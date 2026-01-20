@@ -8,3 +8,4 @@ I am an autodidact focused on the practical application of AI and the developmen
 
 I am particularly interested in "Human-in-the-Loop" (HITL) systems, where human expertise in complex data—such as medical records and case summarization—ensures AI reliability.  I analyze societal fallacies to separate popular myths from verifiable, functional truths, valuing intellectual honesty and technical accuracy in every project.
 
+
