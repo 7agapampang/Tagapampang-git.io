@@ -1,80 +1,49 @@
 import os
 import subprocess
 
-# === CONFIGURATION ===
-# Assets and output directories.  Ensures a clean workspace.
-assets = "assets"
-output = "output"
-os.makedirs(output, exist_ok=True)
+# === REDACTED CONFIGURATION ===
+# Using generic placeholders to protect local directory structures.
+# Replace these with your actual local paths in your air-gapped environment.
+ASSETS_DIR = "assets"
+OUTPUT_DIR = "output"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Input files
-bg_image = os.path.join(assets, "background.jpg")
-voiceover = os.path.join(assets, "voiceover.wav")
-bg_music = os.path.join(assets, "bg_music.mp3")
-subtitles = os.path.join(assets, "subtitle_draft.srt")
+# Generic Input Placeholders
+background = os.path.join(ASSETS_DIR, "background_image.jpg")
+audio_primary = os.path.join(ASSETS_DIR, "primary_audio.wav")
+audio_background = os.path.join(ASSETS_DIR, "ambient_track.mp3")
+subtitles = os.path.join(ASSETS_DIR, "subtitles_final.srt")
 
-# Output files
-mixed_audio = os.path.join(output, "mixed_audio.mp3")
-output_9x16 = os.path.join(output, "final_9-16.mp4")
-output_16x9 = os.path.join(output, "final_16-9.mp4")
+# Output Placeholders
+mixed_audio = os.path.join(OUTPUT_DIR, "audio_composite.mp3")
+video_vertical = os.path.join(OUTPUT_DIR, "render_9-16.mp4")
+video_horizontal = os.path.join(OUTPUT_DIR, "render_16-9.mp4")
 
-# === CHECK FILES ===
-for f in [bg_image, voiceover, bg_music, subtitles]:
-    if not os.path.exists(f):
-        print(f"❌ Missing: {f}")
-        exit(1)
-
-# === STEP 1: MIX VOICEOVER + MUSIC ===
-# Voice 90%, Music 30%.  Mixing is performed locally via FFmpeg.
+# === EXECUTION LOGIC ===
+# Step 1: Local Audio Composite
 mix_cmd = [
     "ffmpeg", "-y",
-    "-i", voiceover,
-    "-i", bg_music,
+    "-i", audio_primary,
+    "-i", audio_background,
     "-filter_complex",
-    "[0:a]volume=0.9[a1];[1:a]volume=0.3[a2];[a1][a2]amix=inputs=2:duration=longest:dropout_transition=3[aout]",
+    "[0:a]volume=0.9[a1];[1:a]volume=0.3[a2];[a1][a2]amix=inputs=2:duration=longest[aout]",
     "-map", "[aout]",
     mixed_audio
 ]
-print("🎧 Mixing voiceover and background music...")
 subprocess.run(mix_cmd, check=True)
 
-# === STEP 2: CREATE 9:16 VIDEO ===
-# Utilizing 'flags=lanczos' for crisp image scaling and '-crf 18' for quality.
-render_9x16 = [
+# Step 2: High-Fidelity Video Render
+# Utilizes Lanczos scaling for crisp visual output.
+render_cmd = [
     "ffmpeg", "-y",
     "-loop", "1",
-    "-i", bg_image,
-    "-i", mixed_audio,
-    "-vf", f"scale=1080:1920:flags=lanczos,subtitles='{subtitles.replace(os.sep, '/')}'",
-    "-c:v", "libx264",
-    "-crf", "18",
-    "-tune", "stillimage",
-    "-c:a", "aac",
-    "-b:a", "192k",
-    "-pix_fmt", "yuv420p",
-    "-shortest",
-    output_9x16
-]
-print("🎥 Rendering vertical (9:16) video...")
-subprocess.run(render_9x16, check=True)
-
-# === STEP 3: CREATE 16:9 VIDEO ===
-render_16x9 = [
-    "ffmpeg", "-y",
-    "-loop", "1",
-    "-i", bg_image,
+    "-i", background,
     "-i", mixed_audio,
     "-vf", f"scale=1920:1080:flags=lanczos,subtitles='{subtitles.replace(os.sep, '/')}'",
     "-c:v", "libx264",
     "-crf", "18",
-    "-tune", "stillimage",
-    "-c:a", "aac",
-    "-b:a", "192k",
     "-pix_fmt", "yuv420p",
     "-shortest",
-    output_16x9
+    video_horizontal
 ]
-print("🎞️ Rendering horizontal (16:9) video...")
-subprocess.run(render_16x9, check=True)
-
-print("\n✅ All done!  Assets processed with technical accuracy.")
+subprocess.run(render_cmd, check=True)
