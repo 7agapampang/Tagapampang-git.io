@@ -4,6 +4,6 @@ Tagapampang's Digital Twin
 A dedicated space for managing the technical foundations of my digital identity and personal data.
 
 ### About Me
-I am a technical specialist focused on AI development and accurate documentation.  My background in medical transcription has hardwired me to prioritize precision and to flag uncertainties rather than making assumptions.
+I am an autodidact focused on the practical application of AI and the development of local, air-gapped software.  My professional background in medical linguistics, record abstraction, and clinical annotation has hardwired me to prioritize precision and to flag uncertainties rather than making assumptions.
 
-Outside of software, I analyze historical narratives and societal fallacies to better understand the structures of modern information.  I value clarity, intellectual honesty, and the practical application of AI hardware and software.
+I am particularly interested in "Human-in-the-Loop" (HITL) systems, where human expertise in complex data—such as medical records and case summarization—ensures AI reliability.  I analyze societal fallacies to separate popular myths from verifiable, functional truths, valuing intellectual honesty and technical accuracy in every project.
