@@ -1,4 +1,4 @@
 # Tagapampang-git.io
 Tagapampang's Digital Twin
 
-This is a personal project focused on my digital presence and data.
+A dedicated space for managing the technical foundations of my digital identity and personal data.
